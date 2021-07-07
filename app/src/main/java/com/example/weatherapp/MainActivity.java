@@ -6,6 +6,7 @@ import androidx.core.view.ViewCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -51,26 +52,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final Map<Character, String> WIND_DIRECTION = new HashMap<Character, String>() {{
-        put('N', "С");
-        put('E', "В");
-        put('S', "Ю");
-        put('W', "З");
-    }};
-
-    private static final Map<String, String> PRECIPITATION = new HashMap<String, String>() {{
-        put("no", "нет");
-        put("rain", "дождь");
-        put("snow", "снег");
-    }};
-
-    private static final String APP_ID = "77d93a8a07e1b1c76cdfbf7d3f5401e1";
-
     private String city = "Омск";
-    private final String lang = "ru";
-    private final String units = "metric";
-
-    final StringBuilder sb = new StringBuilder();
 
     CurrentWeather currentWeather;
 
@@ -81,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     TextView tv_wind;
     TextView tv_precipitation;
     TextView tv_weather;
-//    TextView tv_weather_card;
     ImageView iv_icon;
 
     SearchView searchView;
@@ -91,8 +72,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ThemeUtils.onActivityCreateSetTheme(this);
+        ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
+
+        currentWeather = (CurrentWeather) getIntent().getSerializableExtra(PREFERENCES.APP_PREFERENCES_WEATHER);
+        System.out.println(currentWeather);
 
         tv_temperature = findViewById(R.id.temperature);
         tv_feels_like = findViewById(R.id.feels_like);
@@ -101,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         tv_wind = findViewById(R.id.wind);
         tv_precipitation = findViewById(R.id.precipitation);
         tv_weather = findViewById(R.id.current_weather);
-//        tv_weather_card = findViewById(R.id.weather);
         iv_icon = findViewById(R.id.icon_weather);
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
@@ -123,136 +106,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
 
         makeTransparentStatusAndNavigationBar();
-
-        Async();
-    }
-
-    private void Async() {
-        System.out.println("Async");
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                String api = "https://api.openweathermap.org/data/2.5/weather?q="+ city +"&appid=" + APP_ID +"&lang="+ lang +"&units=" + units + "&mode=xml";
-
-                HttpURLConnection connection = null;
-
-                System.out.println("run");
-
-                try {
-                    URL url = new URL(api);
-
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.connect();
-
-                    System.out.println(connection.getResponseCode() + "!!!!");
-
-                    if (HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-
-                        String str;
-                        // проверка строки из xml И добавление ее в StringBuilder
-                        while ((str = br.readLine()) != null) {
-                            sb.append(str).append("\n");
-                        }
-
-                        br.close();
-
-                        InputSource is = new InputSource(new StringReader(sb.toString()));
-                        parser(is);
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                unloadingDataForActivity();
-                            }
-                        });
-                    }
-                } catch (Throwable cause) {
-                    cause.printStackTrace();
-                } finally {
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
-                }
-            }
-        });
-    }
-
-    private void parser(InputSource file) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
-
-        Node node = null;
-
-        node = doc.getElementsByTagName("temperature").item(0);
-        NamedNodeMap temperature_attributes = node.getAttributes();
-        int temperature = (int) Math.round(Double.parseDouble(
-                temperature_attributes.getNamedItem("value").getNodeValue()));
-
-        node = doc.getElementsByTagName("feels_like").item(0);
-        NamedNodeMap feels_like_attributes = node.getAttributes();
-        int feels_like = (int) Math.round(Double.parseDouble(
-                feels_like_attributes.getNamedItem("value").getNodeValue()));
-
-        node = doc.getElementsByTagName("humidity").item(0);
-        NamedNodeMap humidity_attributes = node.getAttributes();
-        int humidity = Integer.parseInt(
-                humidity_attributes.getNamedItem("value").getNodeValue());
-
-        node = doc.getElementsByTagName("pressure").item(0);
-        NamedNodeMap pressure_attributes = node.getAttributes();
-        double pressure_hPa = Double.parseDouble(
-                pressure_attributes.getNamedItem("value").getNodeValue());
-        pressure_hPa = pressure_hPa / 1.333;
-        int pressure_mmHg = (int) Math.round(pressure_hPa);
-
-        node = doc.getElementsByTagName("wind").item(0);
-        Element el_wind = (Element) node;
-
-        Node node_wind_speed = el_wind.getElementsByTagName("speed").item(0);
-        NamedNodeMap wind_speed_attributes = node_wind_speed.getAttributes();
-        int wind_speed = Integer.parseInt(
-                wind_speed_attributes.getNamedItem("value").getNodeValue());
-
-        Node node_wind_direction = el_wind.getElementsByTagName("direction").item(0);
-        NamedNodeMap wind_direction_attributes = node_wind_direction.getAttributes();
-        String wind_direction_en = wind_direction_attributes.getNamedItem("code").getNodeValue();
-        StringBuilder wind_direction_ru = new StringBuilder();
-        for (char ch : wind_direction_en.toCharArray()) {
-            wind_direction_ru.append(WIND_DIRECTION.get(ch));
-        }
-
-        node = doc.getElementsByTagName("precipitation").item(0);
-        NamedNodeMap precipitation_attributes = node.getAttributes();
-        String precipitation_en = precipitation_attributes.getNamedItem("mode").getNodeValue();
-        String precipitation_ru = PRECIPITATION.get(precipitation_en.toLowerCase());
-
-        node = doc.getElementsByTagName("weather").item(0);
-        NamedNodeMap weather_attributes = node.getAttributes();
-        String weather = weather_attributes.getNamedItem("value").getNodeValue();
-
-        String icon_code = weather_attributes.getNamedItem("icon").getNodeValue();
-        int icon = getResources().getIdentifier(
-                "image_" + icon_code,
-                "drawable",
-                getApplicationContext().getPackageName());
-
-        System.out.println(" - " + temperature + " - " + feels_like + " - " + humidity + " - " + pressure_mmHg + " - " +wind_speed + " - " + wind_direction_ru.toString() + " - " + precipitation_ru + " - " + weather + " - " + icon + " - ");
-
-        // запись всех данных в класс
-        currentWeather = new CurrentWeather(
-                temperature,
-                feels_like,
-                humidity,
-                pressure_mmHg,
-                wind_speed,
-                wind_direction_ru.toString(),
-                precipitation_ru,
-                weather,
-                icon
-        );
+        unloadingDataForActivity();
     }
 
     private void unloadingDataForActivity() {
@@ -263,13 +117,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         tv_wind.setText(currentWeather.getWindSpeed() + " " + currentWeather.getWindDirection());
         tv_precipitation.setText(currentWeather.getPrecipitation());
         tv_weather.setText(firstUpperCase(currentWeather.getWeather()));
-//        tv_weather_card.setText(firstUpperCase(currentWeather.getWeather()));
         iv_icon.setImageResource(currentWeather.getIcon());
-
-//        if (ThemeApplication.i==0) {
-//            ThemeApplication.i += 1;
-//            ThemeUtils.changeTheme(MainActivity.this, "03n");
-//        }
     }
 
     public String firstUpperCase(String text){
@@ -289,8 +137,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(false);
-                Async();
+                Activity activity = MainActivity.this;
+                activity.startActivity(new Intent(getApplicationContext(), SplashScreen.class));
+                activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                activity.finish();
             }
-        }, 3500);
+        }, 1500);
     }
 }

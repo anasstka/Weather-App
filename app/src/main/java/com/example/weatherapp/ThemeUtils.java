@@ -9,12 +9,15 @@ public class ThemeUtils {
 
     private static String sTheme = "01d";
 
-    public static void changeTheme(Activity activity, String idTheme) {
-        sTheme = idTheme;
-        activity.recreate();
+//    public static void changeTheme(Activity activity, String idTheme) {
+//        sTheme = idTheme;
+////        activity.recreate();
 //        activity.finish();
-//        activity.startActivity(new Intent(activity, activity.getClass()));
+//        activity.startActivity(new Intent(activity, SplashScreen.class));
 //        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+    public static void changeTheme(String idTheme) {
+        sTheme = idTheme;
     }
 
     public static void onActivityCreateSetTheme(Activity activity) {

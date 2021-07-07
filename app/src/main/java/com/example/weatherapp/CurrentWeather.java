@@ -1,6 +1,8 @@
 package com.example.weatherapp;
 
-public class CurrentWeather {
+import java.io.Serializable;
+
+public class CurrentWeather implements Serializable {
     private int temperature;        // температура
     private int feelsLike;         // по ощущениям
     private int humidity;           // влажность
@@ -9,9 +11,10 @@ public class CurrentWeather {
     private String windDirection;  // направление ветра (одна/две буквы)
     private String precipitation;   // осадки
     private String weather;         // описание погоды
+    private String idIcon;          // id иконки
     private int icon;               // икнока
 
-    public CurrentWeather(int temperature, int feelsLike, int humidity, int pressure, int windSpeed, String windDirection, String precipitation, String weather, int icon) {
+    public CurrentWeather(int temperature, int feelsLike, int humidity, int pressure, int windSpeed, String windDirection, String precipitation, String weather, String idIcon, int icon) {
         this.temperature = temperature;
         this.feelsLike = feelsLike;
         this.humidity = humidity;
@@ -20,6 +23,7 @@ public class CurrentWeather {
         this.windDirection = windDirection;
         this.precipitation = precipitation;
         this.weather = weather;
+        this.idIcon = idIcon;
         this.icon = icon;
     }
 
@@ -93,5 +97,13 @@ public class CurrentWeather {
 
     public void setIcon(int icon) {
         this.icon = icon;
+    }
+
+    public String getIdIcon() {
+        return idIcon;
+    }
+
+    public void setIdIcon(String idIcon) {
+        this.idIcon = idIcon;
     }
 }
