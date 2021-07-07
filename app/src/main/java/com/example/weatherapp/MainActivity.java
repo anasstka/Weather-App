@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
 
         tv_temperature = findViewById(R.id.temperature);
@@ -264,6 +265,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         tv_weather.setText(firstUpperCase(currentWeather.getWeather()));
 //        tv_weather_card.setText(firstUpperCase(currentWeather.getWeather()));
         iv_icon.setImageResource(currentWeather.getIcon());
+
+//        if (ThemeApplication.i==0) {
+//            ThemeApplication.i += 1;
+//            ThemeUtils.changeTheme(MainActivity.this, "03n");
+//        }
     }
 
     public String firstUpperCase(String text){
