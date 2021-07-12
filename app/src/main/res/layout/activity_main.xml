@@ -22,23 +22,46 @@
             android:scaleType="fitStart"
             app:srcCompat="?background" />
 
-        <SearchView
+        <EditText
             android:id="@+id/search"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-
+            android:layout_height="34dp"
             android:layout_marginStart="20dp"
+
             android:layout_marginTop="32dp"
             android:layout_marginEnd="20dp"
+            android:background="@drawable/back_search"
 
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:hint="Введите название города"
             android:imeOptions="actionSearch"
-            
-            android:iconifiedByDefault="true"
-            android:queryBackground="@drawable/back_search"
-            android:queryHint="Введите название города"
-            android:searchHintIcon="@drawable/searchview_search_icon"
+            android:inputType="textImeMultiLine"
 
-            android:searchIcon="@drawable/icon_search" />
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+
+            android:textColor="?colorPrimary"
+            android:textColorHint="?colorPrimary"
+            android:textSize="14sp" />
+
+        <!--        <SearchView-->
+        <!--            android:id="@+id/search"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="40dp"-->
+
+        <!--            android:layout_marginStart="20dp"-->
+        <!--            android:layout_marginTop="32dp"-->
+        <!--            android:layout_marginEnd="20dp"-->
+
+        <!--            android:imeOptions="actionSearch"-->
+        <!--            -->
+        <!--            android:iconifiedByDefault="true"-->
+        <!--            android:queryBackground="@drawable/back_search"-->
+        <!--            android:queryHint="Введите название города"-->
+        <!--            android:searchHintIcon="@drawable/searchview_search_icon"-->
+
+        <!--            android:searchIcon="@drawable/icon_search" />-->
 
         <LinearLayout
             android:id="@+id/main_info"

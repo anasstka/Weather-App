@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -43,6 +45,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     CurrentWeather currentWeather;
 
+    TextView tv_city;
     TextView tv_temperature;
     TextView tv_feels_like;
     TextView tv_humidity;
@@ -65,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     TextView tv_weather;
     ImageView iv_icon;
 
-    SearchView searchView;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -75,9 +80,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ThemeUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = getSharedPreferences(PREFERENCES.APP_PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         currentWeather = (CurrentWeather) getIntent().getSerializableExtra(PREFERENCES.APP_PREFERENCES_WEATHER);
         System.out.println(currentWeather);
 
+        tv_city = findViewById(R.id.current_location);
         tv_temperature = findViewById(R.id.temperature);
         tv_feels_like = findViewById(R.id.feels_like);
         tv_humidity = findViewById(R.id.humidity);
@@ -93,12 +102,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 R.color.light_blue, R.color.middle_blue, R.color.deep_blue
         );
 
-        searchView = findViewById(R.id.search);
-        searchView.setOnKeyListener(new View.OnKeyListener() {
+        EditText search = findViewById(R.id.search);
+        search.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
-                    Toast.makeText(getApplicationContext(), "УРА", Toast.LENGTH_SHORT).show();
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+//                    Toast.makeText(getApplicationContext(), "УРА", Toast.LENGTH_SHORT).show();
+                    editor.putString(PREFERENCES.APP_PREFERENCES_CITY, search.getText().toString().trim().toLowerCase());
+                    editor.apply();
+                    reloadApp();
                     return true;
                 }
                 return false;
@@ -110,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void unloadingDataForActivity() {
+        tv_city.setText(currentWeather.getCity());
         tv_temperature.setText(currentWeather.getTemperature() + "°C");
         tv_feels_like.setText(currentWeather.getFeelsLike() + "°");
         tv_humidity.setText(currentWeather.getHumidity() + "%");
@@ -137,11 +150,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(false);
-                Activity activity = MainActivity.this;
-                activity.startActivity(new Intent(getApplicationContext(), SplashScreen.class));
-                activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                activity.finish();
+                reloadApp();
             }
         }, 1500);
+    }
+
+    private void reloadApp() {
+        Activity activity = MainActivity.this;
+        activity.startActivity(new Intent(getApplicationContext(), SplashScreen.class));
+        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        activity.finish();
     }
 }

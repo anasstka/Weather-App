@@ -3,18 +3,32 @@ package com.example.weatherapp;
 import java.io.Serializable;
 
 public class CurrentWeather implements Serializable {
+
+    private String city;            // город
     private int temperature;        // температура
-    private int feelsLike;         // по ощущениям
+    private int feelsLike;          // по ощущениям
     private int humidity;           // влажность
     private int pressure;           // давление в мм рт ст
-    private int windSpeed;         // скорость ветра в м/с
-    private String windDirection;  // направление ветра (одна/две буквы)
+    private int windSpeed;          // скорость ветра в м/с
+    private String windDirection;   // направление ветра (одна/две буквы)
     private String precipitation;   // осадки
     private String weather;         // описание погоды
     private String idIcon;          // id иконки
     private int icon;               // икнока
 
-    public CurrentWeather(int temperature, int feelsLike, int humidity, int pressure, int windSpeed, String windDirection, String precipitation, String weather, String idIcon, int icon) {
+    public CurrentWeather(String city,
+                          int temperature,
+                          int feelsLike,
+                          int humidity,
+                          int pressure,
+                          int windSpeed,
+                          String windDirection,
+                          String precipitation,
+                          String weather,
+                          String idIcon,
+                          int icon) {
+
+        this.city = city;
         this.temperature = temperature;
         this.feelsLike = feelsLike;
         this.humidity = humidity;
@@ -105,5 +119,13 @@ public class CurrentWeather implements Serializable {
 
     public void setIdIcon(String idIcon) {
         this.idIcon = idIcon;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

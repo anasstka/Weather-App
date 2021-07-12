@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,20 +55,17 @@ public class SplashScreen extends AppCompatActivity {
 
     CurrentWeather currentWeather;
 
-    SharedPreferences sharedPreferencesж;
     SharedPreferences.Editor editor;
-
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sharedPreferencesж = getSharedPreferences(PREFERENCES.APP_PREFERENCES, Context.MODE_PRIVATE);
-        editor = sharedPreferencesж.edit();
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES.APP_PREFERENCES, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
-        if(sharedPreferencesж.contains(PREFERENCES.APP_PREFERENCES_CITY)) {
-            city = sharedPreferencesж.getString(PREFERENCES.APP_PREFERENCES_CITY, "");
+        if(sharedPreferences.contains(PREFERENCES.APP_PREFERENCES_CITY)) {
+            city = sharedPreferences.getString(PREFERENCES.APP_PREFERENCES_CITY, "");
         } else {
             city = "Омск";
         }
@@ -122,6 +120,19 @@ public class SplashScreen extends AppCompatActivity {
                                 activity.finish();
                             }
                         });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "ОШИБКА! Город введен некорректно!", Toast.LENGTH_SHORT).show();
+                                editor.putString(PREFERENCES.APP_PREFERENCES_CITY, "омск");
+                                editor.apply();
+                                Activity activity = SplashScreen.this;
+                                activity.startActivity(new Intent(getApplicationContext(), SplashScreen.class));
+                                activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                activity.finish();
+                            }
+                        });
                     }
                 } catch (Throwable cause) {
                     cause.printStackTrace();
@@ -140,6 +151,10 @@ public class SplashScreen extends AppCompatActivity {
         Document doc = db.parse(file);
 
         Node node = null;
+
+        node = doc.getElementsByTagName("city").item(0);
+        NamedNodeMap city_attributes = node.getAttributes();
+        String current_city = city_attributes.getNamedItem("name").getNodeValue();
 
         node = doc.getElementsByTagName("temperature").item(0);
         NamedNodeMap temperature_attributes = node.getAttributes();
@@ -168,8 +183,8 @@ public class SplashScreen extends AppCompatActivity {
 
         Node node_wind_speed = el_wind.getElementsByTagName("speed").item(0);
         NamedNodeMap wind_speed_attributes = node_wind_speed.getAttributes();
-        int wind_speed = Integer.parseInt(
-                wind_speed_attributes.getNamedItem("value").getNodeValue());
+        int wind_speed = (int) Math.round(Double.parseDouble(
+                wind_speed_attributes.getNamedItem("value").getNodeValue()));
 
         Node node_wind_direction = el_wind.getElementsByTagName("direction").item(0);
         NamedNodeMap wind_direction_attributes = node_wind_direction.getAttributes();
@@ -198,6 +213,7 @@ public class SplashScreen extends AppCompatActivity {
 
         // запись всех данных в класс
         currentWeather = new CurrentWeather(
+                current_city,
                 temperature,
                 feels_like,
                 humidity,

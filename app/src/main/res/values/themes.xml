@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/main_color_cloudy</item>
         <item name="colorSecondary">@color/secondary_color_cloudy</item>
         <item name="background">@drawable/background_cloudy</item>
+        <item name="searchViewStyle">@color/search_color_cloudy</item>
 
         <item name="android:windowLightStatusBar">true</item>
     </style>
@@ -15,6 +16,7 @@
         <item name="colorPrimary">@color/main_color_sunny</item>
         <item name="colorSecondary">@color/secondary_color_sunny</item>
         <item name="background">@drawable/background_sunny</item>
+        <item name="searchViewStyle">@color/search_color_sunny</item>
 
         <item name="android:windowLightStatusBar">true</item>
     </style>
@@ -25,6 +27,7 @@
         <item name="colorPrimary">@color/main_color_thunderstorm</item>
         <item name="colorSecondary">@color/secondary_color_thunderstorm</item>
         <item name="background">@drawable/background_thunderstorm</item>
+        <item name="searchViewStyle">@color/search_color_thunderstorm</item>
 
         <item name="android:windowLightStatusBar">false</item>
     </style>
@@ -35,6 +38,7 @@
         <item name="colorPrimary">@color/main_color_rain</item>
         <item name="colorSecondary">@color/secondary_color_rain</item>
         <item name="background">@drawable/background_rain</item>
+        <item name="searchViewStyle">@color/search_color_rain</item>
 
         <item name="android:windowLightStatusBar">false</item>
     </style>
@@ -45,6 +49,7 @@
         <item name="colorPrimary">@color/main_color_night</item>
         <item name="colorSecondary">@color/secondary_color_night</item>
         <item name="background">@drawable/background_night</item>
+        <item name="searchViewStyle">@color/search_color_night</item>
 
         <item name="android:windowLightStatusBar">false</item>
     </style>
@@ -55,6 +60,7 @@
         <item name="colorPrimary">@color/main_color_rain_night</item>
         <item name="colorSecondary">@color/secondary_color_rain_night</item>
         <item name="background">@drawable/background_rain_night</item>
+        <item name="searchViewStyle">@color/search_color_rain_night</item>
 
         <item name="android:windowLightStatusBar">false</item>
     </style>
@@ -65,6 +71,7 @@
         <item name="colorPrimary">@color/main_color_fog</item>
         <item name="colorSecondary">@color/secondary_color_fog</item>
         <item name="background">@drawable/background_fog</item>
+        <item name="searchViewStyle">@color/search_color_fog</item>
 
         <item name="android:windowLightStatusBar">false</item>
     </style>
@@ -72,7 +79,7 @@
     // added theme for winter
 
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splashscreen</item>
+        <item name="android:windowBackground">@drawable/splashscreen_day</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>

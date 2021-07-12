@@ -5,42 +5,49 @@
     <color name="secondary_color_cloudy">#13293D</color>
     <color name="card_color_cloudy">#9EB7E5</color>
     <color name="background_color_cloudy">#CAD6E9</color>
+    <color name="search_color_cloudy">#B29EB7E5</color>
 
     // main sunny colors 01d
     <color name="main_color_sunny">#12406A</color>
     <color name="secondary_color_sunny">#12406A</color>
     <color name="card_color_sunny">#97ADD6</color>
     <color name="background_color_sunny">#789BCC</color>
+    <color name="search_color_sunny">#B297ADD6</color>
 
     // main thunderstorm colors 11d 11n
     <color name="main_color_thunderstorm">#CECDCB</color>
     <color name="secondary_color_thunderstorm">#13293D</color>
     <color name="card_color_thunderstorm">#6E8E9A</color>
     <color name="background_color_thunderstorm">#313B4C</color>
+    <color name="search_color_thunderstorm">#B26E8E9A</color>
 
     // main rain colors 09d 10d
     <color name="main_color_rain">#CCDBDC</color>
     <color name="secondary_color_rain">#0D1F30</color>
     <color name="card_color_rain">#287F9B</color>
     <color name="background_color_rain">#275169</color>
+    <color name="search_color_rain">#B2287F9B</color>
 
     // main night colors 01n 02n 03n 04n
     <color name="main_color_night">#CCDBDC</color>
     <color name="secondary_color_night">#10202F</color>
     <color name="card_color_night">#5B6B71</color>
     <color name="background_color_night">#04080B</color>
+    <color name="search_color_night">#B25B6B71</color>
 
     // main rain night colors 09n 10n
     <color name="main_color_rain_night">#CCDBDC</color>
     <color name="secondary_color_rain_night">#13293D</color>
     <color name="card_color_rain_night">#5B6B71</color>
     <color name="background_color_rain_night">#04080B</color>
+    <color name="search_color_rain_night">#B25B6B71</color>
 
     // main fog colors 50d 50n
     <color name="main_color_fog">#CCDBDC</color>
     <color name="secondary_color_fog">#17222C</color>
     <color name="card_color_fog">#6A7D84</color>
     <color name="background_color_fog">#2B2E30</color>
+    <color name="search_color_fog">#B26A7D84</color>
 
     // colors SwipeRefreshLayout
     <color name="light_blue">#3A7CBA</color>
